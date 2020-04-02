@@ -10,6 +10,10 @@ const Login = Loadable({
     loader: () => import('./Login'),
     loading: Loading
 })
+const Center = Loadable({
+    loader: () => import('./Center'),
+    loading: Loading
+})
 const NotFound = Loadable({
     loader: () => import('./NotFound'),
     loading: Loading
@@ -26,12 +30,19 @@ const ArticleEdit = Loadable({
     loader: () => import('./Article/Edit'),
     loading: Loading
 })
+const ArticleCreate = Loadable({
+    loader: () => import('./Article/ArticleCreate'),
+    loading: Loading
+})
+
 
 export {
     Dashboard,
     Login,
+    Center,
     NotFound,
     Settings,
     ArticleList,
-    ArticleEdit
+    ArticleEdit,
+    ArticleCreate
 }

@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
-import { Layout, Menu } from 'antd';
-import { DashboardOutlined, UnorderedListOutlined, SettingOutlined } from '@ant-design/icons';
+import { Layout, Menu, Dropdown,Avatar } from 'antd';
+import { 
+    DashboardOutlined, UnorderedListOutlined, 
+    SettingOutlined,DownOutlined, UserOutlined,LogoutOutlined
+ }
+from '@ant-design/icons';
 import { adminRoutes } from '../../routers'
 import { Link,withRouter } from 'react-router-dom'
+import {  } from '@ant-design/icons'
 import logo from './logo.png'
 import './frame.less'
 const { Header, Content, Sider } = Layout;
@@ -10,7 +15,22 @@ const menus = adminRoutes.filter(route => route.isNav === true)
 
 @withRouter
 class Frame extends Component {
-
+    constructor(){
+        super()
+        this.state = {
+            defaultAvatar: false
+        }
+    }
+    onClick = ({ key }) => {
+        this.props.history.push(key)
+      };
+    menu = (
+        <Menu onClick={this.onClick}>
+          <Menu.Item key="/admin/center"><UserOutlined />个人中心</Menu.Item>
+          <Menu.Item key="/admin/settings"><SettingOutlined />个人设置</Menu.Item>
+          <Menu.Item key="/login"><LogoutOutlined />退出登录</Menu.Item>
+        </Menu>
+      )
     menuIcon = (icon) => {
         switch (icon) {
             case 'DashboardOutlined':
@@ -19,6 +39,8 @@ class Frame extends Component {
                 return <UnorderedListOutlined />
             case 'SettingOutlined':
                 return <SettingOutlined />
+            case 'UserOutlined':
+            return <UserOutlined />
             default:
                 break;
         }
@@ -36,7 +58,17 @@ class Frame extends Component {
                         <Link to="/admin">
                             <img src={logo} alt="react-admin" />
                         </Link>
-                       
+                    </div>
+                    <div className="personalCenter">
+                        <Dropdown overlay={this.menu}>
+                                <div className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                        <Avatar icon={<UserOutlined />} style={{display:this.state.defaultAvatar? '':'none'}}/>
+                                        <Avatar style={{display:!this.state.defaultAvatar? '':'none'}} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                                        <span style={{display:this.state.defaultAvatar? '':'none'}}>&nbsp;请先登录&nbsp;</span>
+                                        <span style={{display:!this.state.defaultAvatar? '':'none'}}>&nbsp;欢迎您！nnss&nbsp;</span>
+                                        <DownOutlined />
+                                </div>
+                        </Dropdown>
                     </div>
                 </Header>
                 <Layout>

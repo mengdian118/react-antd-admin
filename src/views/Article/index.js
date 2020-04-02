@@ -174,6 +174,9 @@ export default class Article extends Component {
          this.getData()
        })
     }
+    goCreateArticle = () => {
+          this.props.history.push(`/admin/article/create`)
+    }
     toExcel = () => {
       // 实际项目中，这个功能是前端发送一个ajax请求到后端，后端返回一个文件下载地址
       const datamap = this.state.dataSource;
@@ -207,7 +210,9 @@ export default class Article extends Component {
                     <Card
                         title="文章列表"
                         extra={<Button onClick={this.toExcel}>导出excel</Button>}
-                    >
+                        className="articleCard"
+                        >
+                            <div style={{display:'flex',justifyContent:'flex-end',marginBottom: '16px'}}><Button onClick={this.goCreateArticle}>新建文章</Button></div>
                             <Table 
                                     rowKey={record => record.id}
                                     dataSource={this.state.dataSource} 

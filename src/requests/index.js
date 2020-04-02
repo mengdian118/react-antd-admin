@@ -31,7 +31,15 @@ export const getArticles = (offset = 0,limit = 10) => {
 }
 
 // 通过id删除文章
-
 export const deleteAticle = (id) => {
         return service.post(`/api/v1/articleDelete/${id}`)
+}
+
+//通过id获取文章 
+export const getAticleById = (id) => {
+    return service.post(`/api/v1/article/${id}`)
+}
+//保存文章
+export const saveArticle = (id,data) => {
+    return service.post(`/api/v1/articleEdit/${id}`,data)
 }

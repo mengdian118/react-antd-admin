@@ -4,7 +4,9 @@ import {
     NotFound,
     Settings,
     ArticleList,
-    ArticleEdit
+    ArticleEdit,
+    ArticleCreate,
+    Center
 } from '../views'
 
 export const mainRoutes = [
@@ -28,6 +30,15 @@ export const adminRoutes = [
         isNav: true
     },
     {
+        pathname: '/admin/center',
+        component: Center,
+        title: '个人中心',
+        icon: 'UserOutlined',
+        breadcrumbName: '个人中心',
+        isNav: true,
+        exact: true
+    },
+    {
         pathname: '/admin/article',
         component: ArticleList,
         title: '文章管理',
@@ -36,6 +47,11 @@ export const adminRoutes = [
         isNav: true,
         exact: true
     },
+    {
+        pathname: '/admin/article/create/',
+        breadcrumbName: '新建文章',
+        component: ArticleCreate
+    }, 
     {
         pathname: '/admin/article/edit/:id',
         breadcrumbName: '文章编辑',
