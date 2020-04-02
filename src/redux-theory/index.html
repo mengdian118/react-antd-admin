@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>redux实现-原理</title>
+</head>
+
+<body>
+    <div>
+        <button onClick="store.dispatch({type:'jian',n:1})">-</button>
+        <span id="countShow">10</span>
+        <button onClick="store.dispatch({type:'jia',n:1})">+</button>
+    </div>
+    <script>
+        const countShow = document.querySelector('#countShow');
+        const countState = {
+            count: 6
+        }
+        const changeState = (state, action) => {
+            if(!state){
+                return countState
+            }
+            switch (action.type) {
+                case 'jian':
+                    return {
+                        ...state,
+                        count: state.count - action.n
+                    }
+                case 'jia':
+                    return {
+                        ...state,
+                        count: state.count + action.n
+                    }
+                default:
+                    break;
+            }
+        }
+
+        const createStore = (reducer) => {
+
+            let state = null
+
+            const getState = () => state
+
+            const listeners = []
+
+            const subscribe = (listener) => listeners.push(listener)
+
+            const dispatch = (action) => {
+
+                state = changeState(state, action)
+
+                listeners.forEach(listener => listener())
+            }
+            dispatch({})
+            return {
+                getState,
+                dispatch,
+                subscribe
+            }
+        }
+        const store = createStore(changeState)
+        const renderCount = () => {
+            countShow.innerHTML = store.getState().count
+        }
+        renderCount()
+        store.subscribe(renderCount)
+    </script>
+</body>
+
+</html>
