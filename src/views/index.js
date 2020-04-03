@@ -34,6 +34,10 @@ const ArticleCreate = Loadable({
     loader: () => import('./Article/ArticleCreate'),
     loading: Loading
 })
+const Notifications = Loadable({
+    loader: () => import('./Notifications'),
+    loading: Loading
+})
 
 
 export {
@@ -44,5 +48,6 @@ export {
     Settings,
     ArticleList,
     ArticleEdit,
-    ArticleCreate
+    ArticleCreate,
+    Notifications
 }

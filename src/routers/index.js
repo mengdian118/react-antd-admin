@@ -6,7 +6,8 @@ import {
     ArticleList,
     ArticleEdit,
     ArticleCreate,
-    Center
+    Center,
+    Notifications
 } from '../views'
 
 export const mainRoutes = [
@@ -36,6 +37,15 @@ export const adminRoutes = [
         icon: 'UserOutlined',
         breadcrumbName: '个人中心',
         isNav: true,
+        exact: true
+    },
+    {
+        pathname: '/admin/notice',
+        component: Notifications,
+        title: '通知中心',
+        // icon: 'UserOutlined',
+        // breadcrumbName: '通知中心',
+        // isNav: true,
         exact: true
     },
     {

@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { Layout, Menu, Dropdown,Avatar } from 'antd';
+import { Layout, Menu, Dropdown,Avatar,Badge, Tooltip } from 'antd';
 import { 
-    DashboardOutlined, UnorderedListOutlined, 
+    DashboardOutlined, UnorderedListOutlined,QuestionCircleOutlined,
     SettingOutlined,DownOutlined, UserOutlined,LogoutOutlined
  }
 from '@ant-design/icons';
 import { adminRoutes } from '../../routers'
 import { Link,withRouter } from 'react-router-dom'
-import {  } from '@ant-design/icons'
 import logo from './logo.png'
 import './frame.less'
 const { Header, Content, Sider } = Layout;
@@ -15,22 +14,25 @@ const menus = adminRoutes.filter(route => route.isNav === true)
 
 @withRouter
 class Frame extends Component {
-    constructor(){
-        super()
+    
+    constructor(props){
+        super(props)
         this.state = {
-            defaultAvatar: false
+                    defaultAvatar: false,
+                    count: 5,
+                    show: true
         }
     }
-    onClick = ({ key }) => {
-        this.props.history.push(key)
-      };
-    menu = (
+    onClick= ({key})=>{
+            this.props.history.push(key)
+    }
+    myMenu = () => (
         <Menu onClick={this.onClick}>
-          <Menu.Item key="/admin/center"><UserOutlined />个人中心</Menu.Item>
+          <Menu.Item key="/admin/notice"><Badge dot offset={[5,3]}><UserOutlined />通知中心</Badge></Menu.Item>
           <Menu.Item key="/admin/settings"><SettingOutlined />个人设置</Menu.Item>
           <Menu.Item key="/login"><LogoutOutlined />退出登录</Menu.Item>
         </Menu>
-      )
+    )
     menuIcon = (icon) => {
         switch (icon) {
             case 'DashboardOutlined':
@@ -59,14 +61,25 @@ class Frame extends Component {
                             <img src={logo} alt="react-admin" />
                         </Link>
                     </div>
+                    <div>
+                            <Tooltip title="项目地址">
+                                <a target="_blank" rel="noopener noreferrer" href="https://github.com/mengdian118/react-antd-admin.git" className="helpBtn"><QuestionCircleOutlined /></a>
+                            </Tooltip>
+                    </div>
+                    {/* <div>
+                            <span className="bellMess"><Badge offset={[-10,11]} count={this.state.count}><BellOutlined /></Badge></span>
+                              
+                    </div> */}
                     <div className="personalCenter">
-                        <Dropdown overlay={this.menu}>
+                        <Dropdown overlay={this.myMenu()}>
                                 <div className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                        <Avatar icon={<UserOutlined />} style={{display:this.state.defaultAvatar? '':'none'}}/>
+                                    <Badge count={this.state.count} offset={[10,3]}>
+                                        {/* <Avatar icon={<UserOutlined />} style={{display:this.state.defaultAvatar? '':'none'}}/> */}
                                         <Avatar style={{display:!this.state.defaultAvatar? '':'none'}} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
                                         <span style={{display:this.state.defaultAvatar? '':'none'}}>&nbsp;请先登录&nbsp;</span>
                                         <span style={{display:!this.state.defaultAvatar? '':'none'}}>&nbsp;欢迎您！nnss&nbsp;</span>
                                         <DownOutlined />
+                                    </Badge>
                                 </div>
                         </Dropdown>
                     </div>
