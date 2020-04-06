@@ -1,43 +1,44 @@
 import React, { Component } from 'react'
-import { Card, Button, List, Avatar} from 'antd'
-const data = [
-    {
-      title: 'Ant Design Title 1',
-    },
-    {
-      title: 'Ant Design Title 2',
-    },
-    {
-      title: 'Ant Design Title 3',
-    },
-    {
-      title: 'Ant Design Title 4',
-    },
-  ];
-  
-export default class Notifications extends Component {
-  
+import { Card, Button, List, Badge, Spin } from 'antd'
+import { connect } from 'react-redux'
+import { markNotification,markAllNotification } from '../../actions/notification'
+const mapState = state => {
+    const { list, isLoading } = state.notifications
+    return {
+        list,
+        isLoading
+    }
+}
+@connect(mapState, { markNotification,markAllNotification })
+class Notifications extends Component {
+    No = 1
     render() {
-       
         return (
-            <Card
+            <Spin spinning={this.props.isLoading}>
+                <Card
                     title="通知中心"
-                    extra={<Button>全部标记已读</Button>}
-            >
-               <List
+                    extra={<Button 
+                            onClick={this.props.markAllNotification}
+                            disabled={this.props.list.every(item => item.hasRead === true)}
+                        >全部标记为已读</Button>}
+                >
+                    <List
                         itemLayout="horizontal"
-                        dataSource={data}
-                        renderItem={item => (
-                        <List.Item>
-                            <List.Item.Meta
-                            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                            title={<a href="https://ant.design">{item.title}</a>}
-                            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                            />
-                        </List.Item>
+                        dataSource={this.props.list}
+                        renderItem={(item,key) => (
+                                
+                                <List.Item onClick={this.props.markNotification.bind(this, item.id)} className="noticeItem" style={ !item.hasRead ? null : { filter: 'opacity(0.5)', pointerEvents: 'none'}}>
+                                    <List.Item.Meta
+                                        title={<Badge dot={!item.hasRead} offset={[5, 1]}>{key+1}、{item.title}</Badge>}
+                                        description={item.desc}
+                                    />
+                                </List.Item>
+                            
                         )}
-                />
-            </Card>
+                    />
+                </Card>
+            </Spin>
         )
     }
 }
+export default Notifications

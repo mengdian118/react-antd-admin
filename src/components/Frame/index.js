@@ -7,30 +7,40 @@ import {
 from '@ant-design/icons';
 import { adminRoutes } from '../../routers'
 import { Link,withRouter } from 'react-router-dom'
+import { connect } from 'react-redux'
+import {getNotificationList} from '../../actions/notification'
+import {logout} from '../../actions/user'
 import logo from './logo.png'
 import './frame.less'
 const { Header, Content, Sider } = Layout;
 const menus = adminRoutes.filter(route => route.isNav === true)
-
+const mapState = state => {
+    const NoticelistLength =  state.notifications.list.filter(item => item.hasRead === false).length
+    return {
+        NoticelistLength,
+        avatar:state.user.avatar,
+        displayName:state.user.displayName
+    }
+}
+@connect(mapState,{ getNotificationList,logout })
 @withRouter
 class Frame extends Component {
-    
-    constructor(props){
-        super(props)
-        this.state = {
-                    defaultAvatar: false,
-                    count: 5,
-                    show: true
-        }
-    }
+    componentDidMount(){
+        this.props.getNotificationList()
+}
     onClick= ({key})=>{
+        if(key === '/logout'){
+            this.props.logout()
+        } else{
             this.props.history.push(key)
+        }
+            
     }
     myMenu = () => (
         <Menu onClick={this.onClick}>
-          <Menu.Item key="/admin/notice"><Badge dot offset={[5,3]}><UserOutlined />通知中心</Badge></Menu.Item>
+          <Menu.Item key="/admin/notice"><Badge dot={Boolean(this.props.NoticelistLength)} offset={[5,3]}><UserOutlined />通知中心</Badge></Menu.Item>
           <Menu.Item key="/admin/settings"><SettingOutlined />个人设置</Menu.Item>
-          <Menu.Item key="/login"><LogoutOutlined />退出登录</Menu.Item>
+          <Menu.Item key="/logout"><LogoutOutlined  />退出登录</Menu.Item>
         </Menu>
     )
     menuIcon = (icon) => {
@@ -53,6 +63,7 @@ class Frame extends Component {
     render() {
         const selectedKeyAyy = this.props.location.pathname.split('/')
         selectedKeyAyy.length = 3
+        const getLoginUserInfo = JSON.parse(window.localStorage.getItem('userInfo'))
         return (
             <Layout style={{minHeight:"100%"}}>
                 <Header className="header ra-header">
@@ -73,11 +84,9 @@ class Frame extends Component {
                     <div className="personalCenter">
                         <Dropdown overlay={this.myMenu()}>
                                 <div className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                    <Badge count={this.state.count} offset={[10,3]}>
-                                        {/* <Avatar icon={<UserOutlined />} style={{display:this.state.defaultAvatar? '':'none'}}/> */}
-                                        <Avatar style={{display:!this.state.defaultAvatar? '':'none'}} src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                                        <span style={{display:this.state.defaultAvatar? '':'none'}}>&nbsp;请先登录&nbsp;</span>
-                                        <span style={{display:!this.state.defaultAvatar? '':'none'}}>&nbsp;欢迎您！nnss&nbsp;</span>
+                                    <Badge count={this.props.NoticelistLength} offset={[10,3]}>
+                                        <Avatar src={getLoginUserInfo.userInfo.avatar} />
+                                        <span>&nbsp;欢迎您！{getLoginUserInfo.userLoginMess.username}&nbsp;</span>
                                         <DownOutlined />
                                     </Badge>
                                 </div>

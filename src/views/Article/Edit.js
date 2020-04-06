@@ -2,7 +2,7 @@ import React, { Component, createRef } from 'react'
 import { Card, Button, Form, Input, DatePicker,Spin,message } from 'antd'
 import moment from 'moment'
 import E from 'wangeditor'
-import { getAticleById, saveArticle} from '../../requests'
+import { getAticleById, saveArticle} from '../../mock'
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 16 },

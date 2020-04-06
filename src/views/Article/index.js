@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Card, Button, Table, Tag, Tooltip, Modal, Typography, message } from 'antd'
-import { getArticles, deleteAticle} from '../../requests'
+import { getArticles, deleteAticle} from '../../mock'
 import moment from 'moment'
 import XLSX from 'xlsx'
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -142,6 +142,7 @@ export default class Article extends Component {
       .then(res => {
         const columnKeys = Object.keys(res.list[0])
         const columns = this.createColumns(columnKeys)
+        if(!this.updater.isMounted(this)) return
         this.setState({
           total: res.total,
           dataSource: res.list,
@@ -152,6 +153,7 @@ export default class Article extends Component {
 
       })
       .finally(() => {
+        if(!this.updater.isMounted(this)) return
         this.setState({
           isLoading: false
         })

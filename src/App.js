@@ -2,11 +2,22 @@ import React, { Component } from 'react'
 import {Frame} from './components'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { adminRoutes } from './routers'
-export default class App extends Component {
+import { connect } from 'react-redux'
 
+const mapState = state =>{
+    return {
+        isLogin: state.user.isLogin,
+        role:  state.user.role
+    }
+}
+
+@connect(mapState)
+
+ class App extends Component {
     render() {
-        // console.log(this.props)
         return (
+            this.props.isLogin 
+            ?
             <Frame>
                  <Switch>
                     {
@@ -17,7 +28,9 @@ export default class App extends Component {
                                 exact={route.exact}
                                 render={
                                     (routerProps) => {
-                                        return <route.component {...routerProps} />
+                                        const hasPermission = route.roles.includes(this.props.role || JSON.parse(window.localStorage.getItem('userInfo')).userInfo.role || JSON.parse(window.localStorage.getItem('userInfo')).userInfo.role)
+                                        return hasPermission ? <route.component {...routerProps} /> : <Redirect to="/admin/noauth" />
+                                        // return  <route.component {...routerProps} /> 
                                     }
                                 } />
                         })
@@ -26,6 +39,9 @@ export default class App extends Component {
                     <Redirect to="/404" />
                 </Switch>
             </Frame>
+            :
+            <Redirect to="/login" />
         )
     }
 }
+export default App
